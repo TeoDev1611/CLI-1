@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+    "errors"
+    "strings"
 
 	// gitF "github.com/Moldy-Community/moldy/core/git"
 	// "github.com/Moldy-Community/moldy/core/locks"
@@ -23,9 +25,30 @@ var installCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 			resp, err := grab.Get(functions.GetCacheDir(), args[0])
-			functions.CheckErrors(err, "Code 2", "Error in downlaod the cache", "Check your connection or report the error on github")
-			path := filepath.Join(functions.GetCacheDir(), resp.Filename)
-			dat, err2 := ioutil.ReadFile(path)
+			
+            functions.CheckErrors(err, "Code 2", "Error in downlaod the cache", "Check your connection or report the error on github")
+			 
+			var dirfile string
+            
+            err := filepath.Walk(functions.GetCacheDir(), func(path string, info os.FileInfo, err error) error {
+		                  
+                        dirs = path[]
+                       
+                   for i := 0; i < len(dirs); i++ {
+		              	if strings.Contains(dirs[i], "cache") {
+				            dirfile = dirs[i]
+		      	           break
+                        } 
+		              }
+                  if dirfile != "cache"{
+                    return errors.New("File not found") 
+			       }
+		         }
+		return nil
+	})
+            
+            
+            dat, err2 := ioutil.ReadFile(dirlfile)
 			functions.CheckErrors(err2, "Code 2", "Error in read the file check if exists ", "Report the error on github or check if file exists")
 			colors.Info(string(dat))
 		} else {
