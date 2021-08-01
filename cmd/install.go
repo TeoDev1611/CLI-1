@@ -32,15 +32,15 @@ var installCmd = &cobra.Command{
             
             err := filepath.Walk(functions.GetCacheDir(), func(path string, info os.FileInfo, err error) error {
 		                  
-                        dirs = path[]
+                dirs = strinsg.Split(path,"\n")
                        
                    for i := 0; i < len(dirs); i++ {
-		              	if strings.Contains(dirs[i], "cache") {
+		              	if strings.Contains(dirs[i], "cache.json") {
 				            dirfile = dirs[i]
 		      	           break
                         } 
 		              }
-                  if dirfile != "cache"{
+                  if dirfile == ""{
                     return errors.New("File not found") 
 			       }
 		         }
